@@ -1,0 +1,54 @@
+:root {
+    --light-dark: rgba(22, 25, 29, 255);
+    --light-blue: rgba(28, 155, 241, 255);
+    --thin-blue:rgba(28, 155, 241, .2);
+    --little-dark: rgb(51, 54, 57);
+    --dark: rgba(0, 0, 0, 0.65);
+    --dark-theme: rgba(0, 0, 0, 1);
+    --light-theme: white;
+    --grey:rgba(192, 192, 192, .5);
+
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: sans-serif;
+}
+
+.commentSection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* background: salmon; */
+    padding: 1em;
+    border-top: solid 1px var(--grey);
+    row-gap: 1em;
+}
+
+.commentSection .comment{
+    border-radius: 7px;
+    display: flex;
+    column-gap: .5em;
+    background: var(--thin-blue);
+    padding:.5em;
+}
+
+.commentSection .comment .user a{
+    color: var(--dark-theme);
+}
+
+.commentSection .comment a:last-of-type{
+    text-decoration: none;
+}
+
+.commentSection .rounded{
+    border-radius: 30em;
+
+}
+
+.commentSection .comment .contentMsg{
+    padding: .5em;
+}

@@ -1,0 +1,276 @@
+:root {
+    --light-dark: rgba(22, 25, 29, 255);
+    --light-blue: rgba(28, 155, 241, 255);
+    --thin-blue: rgba(28, 155, 241, .2);
+    --little-dark: rgb(51, 54, 57);
+    --dark: rgba(0, 0, 0, 0.65);
+    --dark-theme: rgba(0, 0, 0, 1);
+    --light-theme: white;
+
+}
+
+.switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 50px;
+    height: 18px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#tag {
+    color: var(--light-blue);
+}
+
+
+main .block .suggestion .information {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+main .block .suggestion .information #postNum {
+    font-size: 12px;
+}
+
+main .block .suggestion .back {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main .block .profileInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+main .block .profileInfo .bannerTop {
+    position: relative;
+}
+
+main .block .profileInfo .bannerTop .banner {
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+main .block .profileInfo .bannerTop .banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+main .block .profileInfo .bannerTop .banner form {
+    background: var(--light-theme);
+    position: relative;
+    padding: .5em;
+    border-radius: 30em;
+    position: absolute;
+    bottom: 1em;
+    right:1.5em;
+}
+
+main .block .profileInfo .bannerTop .profilContainer {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+    padding: .2em;
+    background: var(--light-theme);
+    position: absolute;
+    bottom: -1em;
+    left: 1em;
+}
+
+main .block .profileInfo .bannerTop .profilContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+main .block .profileInfo .bannerTop .profilContainer form {
+    background: var(--light-theme);
+    padding: .5em;
+    border-radius: 30em;
+    position: absolute;
+    bottom: 1em;
+    right:1.5em;
+}
+
+
+.edit {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+}
+
+#editBtn {
+    display: flex;
+    border: 1px solid var(--dark-theme);
+    padding: .5em 1em;
+    border-radius: 30em;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+#editBtn:hover {
+    background: rgba(173, 216, 230, .2);
+}
+
+.technicalInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    row-gap: .5em;
+}
+
+.technicalInfo h2 {
+    font-size: 18px;
+}
+
+.technicalInfo .thin {
+    color: rgba(192, 192, 192, .5);
+    font-size: 15px;
+}
+
+.technicalInfo .thin .big {
+    font-weight: 900;
+    color: var(--dark-theme);
+}
+
+.technicalInfo .joined,
+.technicalInfo .follows {
+    display: flex;
+    column-gap: .5em;
+}
+
+.navLink {
+    border-bottom: solid 1px rgba(192, 192, 192, .5);
+    display: flex;
+    /* background: salmon; */
+}
+
+.navLink ul {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navLink ul li {
+    padding: .5em 1em;
+    /* background: teal; */
+}
+
+.navLink ul li:hover {
+    background: var(--thin-blue);
+}
+
+#editBlock{
+    display: flex;
+    flex-direction: column;
+    /* background: salmon; */
+}
+
+#editBlock form{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
+
+#editBlock form input, #editBlock form textarea{
+    height: 2em;
+    border: solid 1px var(--little-dark);
+    background: transparent;
+    color: var(--dark-theme);
+}
+
+#editBlock form textarea{
+    color: var(--dark-theme);
+    height: unset;
+    resize: none;
+}
+
+#editBlock form input[type=submit]{
+    background: var(--light-blue);
+    border: 1px solid var(--light-blue);
+    color: white;
+}
+
+#editBlock form input[type=submit]:hover{
+    filter: brightness(90%);
+}
+
+.logout{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1em;
+}
+
+#followings, #followers{
+    background: var(--light-theme);
+}
+
+.thinb{
+    background: var(--thin-blue);
+    margin-bottom: .5em;
+}

@@ -1,0 +1,162 @@
+:root {
+    --light-dark: rgba(22, 25, 29, 255);
+    --light-blue: rgba(28, 155, 241, 255);
+    --little-dark: rgb(51, 54, 57);
+    --dark: rgba(0, 0, 0, 0.65);
+    --dark-theme: rgba(0, 0, 0, 1);
+    --light-theme: white;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: var(--dark-theme);
+    color: var(--light-theme);
+    justify-content: center;
+}
+
+.switch{
+    display: flex;
+    width: 100%;
+    height: 80vh;
+    background: var(--light-blue);
+}
+
+
+.switch .same{
+    background: var(--light-blue);
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch .same button{
+    padding: .5em 1em;
+    width: 10em;
+    border: solid 1px black;
+    background: white;
+    font-weight: bold;
+    font-size: 1.1em;
+    border-radius: 1em;
+    margin: 1em;
+}
+
+.switch .same button:hover{
+    filter: brightness(90%);
+}
+
+.switch .swipe{
+    overflow: hidden;
+    position: absolute;
+    width: 50%;
+    top: 0;
+    bottom: 0;
+    left:0;
+    transform: translateX(100%);
+    background: white;
+    transition:"all .1s .1s ease";
+    color: var(--dark-theme);
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+
+
+#login{
+    display: none;
+    flex-direction: column;
+    row-gap: 1em;
+    padding: 1em;
+    
+
+}
+
+.swipe #login form{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+    align-items: center;
+
+}
+
+
+.swipe #login .samein{
+    background: var(--light-theme);
+    border-radius: 7px;
+    border: 1px solid var(--light-blue);
+    font-size: 1.1em;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.swipe #login input[type=submit], .swipe #signIn input[type=submit]{
+    background: var(--light-blue);
+    border: 1px solid var(--light-blue);
+    width: 100%;
+    font-size: 1.1em;
+    color: var(--light-theme);
+    border-radius: 7px;
+
+}
+
+
+.swipe #login input[type=submit]:hover, .swipe #signIn input[type=submit]:hover{
+    filter: brightness(90%);
+}
+
+#login h1{
+    color:var(--light-blue);
+}
+
+#signIn{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+    padding: 1em;
+}
+
+.swipe #signIn form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.swipe #signIn .samein{
+    background: var(--light-theme);
+    border-radius: 7px;
+    border: 1px solid var(--light-blue);
+    font-size: 1.1em;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.swipe #signIn form .yourage, .swipe #signIn form .label{
+    display: flex;
+    flex-direction: column;
+}
+
+.yourage{
+    width: 100%;
+}
+

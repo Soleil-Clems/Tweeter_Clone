@@ -1,0 +1,98 @@
+:root {
+    --light-dark: rgba(22, 25, 29, 255);
+    --light-blue: rgba(28, 155, 241, 255);
+    --thin-blue:rgba(28, 155, 241, .2);
+    --little-dark: rgb(51, 54, 57);
+    --dark: rgba(0, 0, 0, 0.65);
+    --dark-theme: rgba(0, 0, 0, 1);
+    --light-theme: white;
+
+}
+
+header{
+    overflow: auto;
+}
+
+header::-webkit-scrollbar{
+    display: none;
+}
+
+.corner{
+    background: var(--thin-blue);
+    border-radius: 1em;
+    padding: 1.5em;
+    margin-bottom: 1em;
+}
+
+.corner h2{
+    margin-bottom: 1em;
+}
+
+.corner .line{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 1em;
+    padding: 1em;
+    border-radius: 30em;
+}
+
+.corner .line:hover{
+    background: rgba(173, 216, 230, .2);
+}
+
+.corner .line .imgProfil{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.corner .line .uInfo{
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: var(--dark-theme);
+    text-decoration: none;
+}
+
+.corner .line .follow{
+    padding: 1em;
+}
+
+.corner .line .follow .followBtn{
+    color: var(--dark-theme);
+    background: var(--light-theme);
+    border: solid 1px var(--dark-theme);
+    padding: .5em 1em;
+    border-radius: 30em;
+}
+
+.corner .line .follow .followBtn:hover{
+    filter: brightness(95%);
+}
+
+.corner .tagParent{
+    display: flex;
+    padding-block: 1em;
+}
+
+.corner .tagParent:hover{
+    background: rgba(173, 216, 230, .2);
+}
+
+.corner .tags{
+    text-decoration: none;
+    color: var(--dark-theme);
+    
+
+}
+
+.corner .tags h4{
+    margin: unset;
+    margin-block: .2em;
+}
+
+.corner .tags p{
+    font-size: 14px;
+    color: var(--little-dark);
+}
