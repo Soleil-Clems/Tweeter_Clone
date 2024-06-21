@@ -19,6 +19,12 @@ class MessengerController
         } else {
             $users = $this->model->getMessengerModel();
             
+            $hashtagController = new HashtagController();
+            $hashtags = $hashtagController->getHashtagController();
+            $tweetController = new TweetController();
+            $allPost = $tweetController->getAllTweetController();
+            $UserController = new UserController();
+            $suggested = $UserController->getUserController();
             include(__DIR__ . '/../views/messenger.php');
             exit;
         }

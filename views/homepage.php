@@ -35,6 +35,8 @@ ob_start();
     </div>
     <div id="allContent">
 
+
+
         <?php foreach ($allPost as $key => $tweet) { ?>
 
             <div class="tweet">
@@ -43,11 +45,8 @@ ob_start();
                         <div class="userInfo">
                             <div class="imgProfil"><img src="<?= $tweet["profil"] ?>" alt=""></div>
                             <div class="infoText">
-
-                                <div class="userName"><?= $tweet["username"] ?></div>
-                                <div class="userPost">
-                                    <?= $tweet["content"] ?>
-                                </div>
+                                <div class="userName"><?= isset($tweet["username"]) ? $tweet["username"] : 'Unknown User' ?></div>
+                                <div class="userPost"><?= $tweet["content"] ?></div>
                             </div>
                         </div>
                     </div>
@@ -58,33 +57,39 @@ ob_start();
                     </div>
                     <div class="footCard">
                         <div class="innerFoot">
-
-                            <div class="commentaire" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat">233</span></div>
+                            <div class="commentaire" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat"><?= count($tweet['comments']) ?></span></div>
                             <div class="share" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-solid fa-retweet"></i><span id="shareStat"><?= $tweet["share"] ?></span></div>
-                            <div class="reaction" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-heart"></i><span class="reacStat"><?= $tweet["share"] ?></span></div>
+                            <div class="reaction" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-heart"></i><span class="reacStat"><?= $tweet["like"] ?></span></div>
                         </div>
                         <div class="commentSection" style="display: none;">
                             <div class="containComment">
-                                <div class="comment">
-                                    <a href="#">
-                                        <div class="imgProfil rounded"><img src="./assets/favicon.webp" alt=""></div>
-                                    </a>
-                                    <div class="boxMsg">
-                                        <div class="user">
-                                            <a href="#">Anonyme</a>
-                                            <a href="#">@anonyme</a>
-
+                                <?php if (!empty($tweet['comments'])) { ?>
+                                    <?php foreach ($tweet['comments'] as $comment) { ?>
+                                        <div class="comment" style="margin-block:.5em;">
+                                            <a href="#">
+                                                <div class="imgProfil rounded"><img src="<?= isset($comment['comment_profil']) ? $comment['comment_profil'] : './assets/favicon.webp' ?>" alt=""></div>
+                                            </a>
+                                            <div class="boxMsg">
+                                                <div class="user">
+                                                    <a href="#"><?= $comment['comment_username'] ?></a>
+                                                    <a href="#">@<?= $comment['comment_pseudo'] ?></a>
+                                                </div>
+                                                <div class="contentMsg"><?= $comment['comment'] ?></div>
+                                            </div>
                                         </div>
-                                        <div class="contentMsg">
-                                            fghjgnhnjjk
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <div class="comment">
+                                        <div class="boxMsg">
+                                            <div class="contentMsg">No comments yet.</div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php } ?>
                             </div>
                             <div class="commentForm">
-                                <form action="" method="post" class="postComment" data-target="<?= $tweet["id"] ?>">
-                                    <textarea name="" id="" cols="30" rows="3" class="com"></textarea>
-                                    <input type="submit" value="Comment">
+                                <form action="" style="display:flex" method="post" class="postComment" data-target="<?= $tweet["id"] ?>">
+                                    <textarea style="background:transparent;color:white; width:75%" placeholder="Comments " id="" cols="30" rows="3" class="com"></textarea>
+                                    <input type="submit" style="border-bottom-left-radius: 1px;border-top-left-radius: 1px" class="comP" value="Comment">
                                 </form>
                             </div>
                         </div>
@@ -93,6 +98,7 @@ ob_start();
             </div>
 
         <?php } ?>
+
     </div>
 </div>
 

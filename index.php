@@ -22,6 +22,8 @@ $router->addRoute("POST", "$urlFollow", "FollowController@followController");
 $router->addRoute("POST", "$urlTag", "HashtagController@getTagController");
 $router->addRoute("POST", "$urlShare", "ManageReactController@setReactController");
 $router->addRoute("POST", "$urlComment", "TweetController@setCommentController");
+$router->addRoute("POST", "$urlGetComment", "TweetController@getCommentController");
+$router->addRoute("POST", "$urlSearch", "UserController@searchUserController");
 $router->addRoute("POST", "$urlLike", "TweetController@setLikeController");
 
 
@@ -33,7 +35,7 @@ if (isset($_SESSION["user"])) {
     $router->addRoute("GET", "$urlOtherProfil", "ProfilController@getProfilController");
     $router->addRoute("GET", "$urlLogout", "AuthController@logout");
     $router->addRoute("GET", "$urlMessenger", "MessengerController@getMessengerController");
-
+    $router->addRoute("GET", "$urlSearch", "UserController@getSearchUserController");
     if (isset($_GET['uid'])) {
         
     }

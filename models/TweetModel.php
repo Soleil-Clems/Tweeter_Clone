@@ -8,23 +8,162 @@ class TweetModel extends Db
         parent::__construct();
     }
 
+
+
+
     public function getAllTweetModel()
     {
-        $query = "SELECT posts.*, COUNT(retweet.id) AS 'share', users.username, users.pseudo, users.profil FROM posts LEFT JOIN users ON posts.user_id = users.id LEFT JOIN retweet ON posts.id = retweet.post_id GROUP BY posts.id";
+        // Requête principale pour les tweets, les retweets, et les réactions
+        $query = "
+        SELECT 
+            posts.*, 
+            COUNT(DISTINCT retweet.id) AS 'share', 
+            COUNT(DISTINCT reaction.id_post) AS 'like', 
+            users.username, 
+            users.pseudo, 
+            users.profil
+        FROM 
+            posts
+        LEFT JOIN 
+            users ON posts.user_id = users.id
+        LEFT JOIN 
+            retweet ON posts.id = retweet.post_id
+        LEFT JOIN 
+            reaction ON posts.id = reaction.id_post
+        GROUP BY 
+            posts.id";
+
         $stmt = $this->db->query($query);
-        $allPost =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-        shuffle($allPost);
-        return $allPost;
+        $allPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Préparer une liste des post IDs pour récupérer les commentaires
+        $postIds = array_column($allPosts, 'id');
+
+        if (!empty($postIds)) {
+            // Requête pour récupérer les commentaires pour tous les posts
+            $placeholders = implode(',', array_fill(0, count($postIds), '?'));
+            $commentQuery = "
+            SELECT 
+                comments.id_post, 
+                comments.comment,  
+                users.id AS comment_user_id, 
+                users.username AS comment_username, 
+                users.pseudo AS comment_pseudo, 
+                users.profil AS comment_profil
+            FROM 
+                comments
+            JOIN 
+                users ON comments.user_id = users.id
+            WHERE 
+                comments.id_post IN ($placeholders)
+            ORDER BY 
+                comments.id ASC";
+
+            $commentStmt = $this->db->prepare($commentQuery);
+            foreach ($postIds as $k => $id) {
+                $commentStmt->bindValue(($k + 1), $id, PDO::PARAM_INT);
+            }
+            $commentStmt->execute();
+            $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $commentsByPostId = [];
+            foreach ($comments as $comment) {
+                $commentsByPostId[$comment['id_post']][] = $comment;
+            }
+
+
+            foreach ($allPosts as &$post) {
+                $post['comments'] = isset($commentsByPostId[$post['id']]) ? $commentsByPostId[$post['id']] : [];
+            }
+        }
+
+        shuffle($allPosts);
+        return $allPosts;
     }
+
+    // public function getAllMyTweetModel($uid)
+    // {
+
+    //     $query = "SELECT posts.*, COUNT(retweet.id) AS 'share', COUNT(reaction.id_post) AS 'like', users.username, users.pseudo, users.profil FROM posts LEFT JOIN users ON posts.user_id = users.id LEFT JOIN retweet ON posts.id = retweet.post_id LEFT JOIN reaction ON posts.id = reaction.id_post WHERE users.id = $uid GROUP BY posts.id";
+    //     $stmt = $this->db->query($query);
+    //     $myPost = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     return $myPost;
+    // }
 
     public function getAllMyTweetModel($uid)
     {
+        // Requête pour récupérer les tweets de l'utilisateur avec les retweets et réactions associés
+        $query = "
+    SELECT 
+        posts.*, 
+        COUNT(retweet.id) AS 'share', 
+        COUNT(reaction.id_post) AS 'like', 
+        users.username, 
+        users.pseudo, 
+        users.profil
+    FROM 
+        posts
+    LEFT JOIN 
+        users ON posts.user_id = users.id
+    LEFT JOIN 
+        retweet ON posts.id = retweet.post_id
+    LEFT JOIN 
+        reaction ON posts.id = reaction.id_post
+    WHERE 
+        users.id = $uid
+    GROUP BY 
+        posts.id";
 
-        $query = "SELECT posts.*, COUNT(retweet.id) AS 'share', COUNT(reaction.id_post) AS 'like', users.username, users.pseudo, users.profil FROM posts LEFT JOIN users ON posts.user_id = users.id LEFT JOIN retweet ON posts.id = retweet.post_id LEFT JOIN reaction ON posts.id = reaction.id_post WHERE users.id = $uid GROUP BY posts.id";
         $stmt = $this->db->query($query);
-        $myPost = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $myPost;
+        $myPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Préparer une liste des IDs de posts pour récupérer les commentaires
+        $postIds = array_column($myPosts, 'id');
+
+        if (!empty($postIds)) {
+            // Requête pour récupérer les commentaires pour tous les posts de l'utilisateur
+            $placeholders = implode(',', array_fill(0, count($postIds), '?'));
+            $commentQuery = "
+        SELECT 
+            comments.id_post, 
+            comments.comment,  
+            users.id AS comment_user_id, 
+            users.username AS comment_username, 
+            users.pseudo AS comment_pseudo, 
+            users.profil AS comment_profil
+        FROM 
+            comments
+        JOIN 
+            users ON comments.user_id = users.id
+        WHERE 
+            comments.id_post IN ($placeholders)
+        ORDER BY 
+            comments.id ASC";
+
+            $commentStmt = $this->db->prepare($commentQuery);
+            foreach ($postIds as $k => $id) {
+                $commentStmt->bindValue(($k + 1), $id, PDO::PARAM_INT);
+            }
+            $commentStmt->execute();
+            $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Regrouper les commentaires par ID de post
+            $commentsByPostId = [];
+            foreach ($comments as $comment) {
+                $commentsByPostId[$comment['id_post']][] = $comment;
+            }
+
+            // Ajouter les commentaires à chaque post dans $myPosts
+            foreach ($myPosts as &$post) {
+                $post['comments'] = isset($commentsByPostId[$post['id']]) ? $commentsByPostId[$post['id']] : [];
+            }
+        }
+
+        return $myPosts;
     }
+
+
     public function getAllMyRetweetModel($uid)
     {
 
@@ -48,36 +187,81 @@ class TweetModel extends Db
             $query = "SELECT comments.comment, users.username, users.pseudo, users.id, users.profil FROM comments JOIN users ON comments.user_id = users.id WHERE id_post=$postId";
             $stmt = $this->db->query($query);
             if ($stmt) {
-                $comments=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $comments;
             }
-
         } else {
             return $exec;
         }
     }
+
+
+    public function getCommentModel($postId)
+    {
+        $query = "SELECT comments.comment, users.username, users.pseudo, users.id, users.profil FROM comments JOIN users ON comments.user_id = users.id WHERE id_post=$postId";
+        $stmt = $this->db->query($query);
+        if ($stmt) {
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $comments;
+        } else {
+            return [];
+        }
+    }
+
+
+
     public function setLikeModel($postId)
     {
         $uid = $_SESSION['user']['id'];
-        $query = "INSERT INTO reaction(id_post, user_id) VALUES(:id_post, :user_id)";
+
+
+        $query = "SELECT * FROM reaction WHERE id_post = :id_post AND user_id = :user_id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id_post', $postId, PDO::PARAM_INT);
-        $stmt->bindParam(':user_id', $uid, PDO::PARAM_STR);
-        $exec = $stmt->execute();
+        $stmt->bindParam(':user_id', $uid, PDO::PARAM_INT);
+        $stmt->execute();
+        $reaction = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($exec) {
-            $query = "SELECT COUNT(*) AS 'like' FROM reaction WHERE id_post=$postId";
-            $stmt = $this->db->query($query);
-            if ($stmt) {
-                $react=$stmt->fetch(PDO::FETCH_ASSOC);
+        if ($reaction) {
+
+            $query = "DELETE FROM reaction WHERE id_post = :id_post AND user_id = :user_id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id_post', $postId, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $uid, PDO::PARAM_INT);
+            $exec = $stmt->execute();
+
+            if ($exec) {
+
+                $query = "SELECT COUNT(*) AS 'like' FROM reaction WHERE id_post = :id_post";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':id_post', $postId, PDO::PARAM_INT);
+                $stmt->execute();
+                $react = $stmt->fetch(PDO::FETCH_ASSOC);
                 return $react;
+            } else {
+                return "Failed to remove like";
             }
-
         } else {
-            return $exec;
+
+            $query = "INSERT INTO reaction(id_post, user_id) VALUES(:id_post, :user_id)";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id_post', $postId, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $uid, PDO::PARAM_INT);
+            $exec = $stmt->execute();
+
+            if ($exec) {
+
+                $query = "SELECT COUNT(*) AS 'like' FROM reaction WHERE id_post = :id_post";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':id_post', $postId, PDO::PARAM_INT);
+                $stmt->execute();
+                $react = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $react;
+            } else {
+                return "Failed to add like";
+            }
         }
     }
-
 
 
     public function postModel($content, $media)

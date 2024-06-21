@@ -111,7 +111,7 @@ main #allPost .formPost{
     display: none;
 }
 
-#submitPost{
+#submitPost, .comP{
     background: var(--light-blue);
     color: white;
     border: solid 1px var(--light-blue);

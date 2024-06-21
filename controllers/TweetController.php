@@ -49,6 +49,16 @@ class TweetController
         }
     }
 
+    public function getCommentController(){
+        if (myVerify($_POST['postId'])) {
+            $postId = myEncrypte($_POST['postId'], "int");
+           
+            $success = $this->model->getCommentModel($postId);
+            header('Content-Type: application/json');
+            echo json_encode(array("success" =>true , "message" => $success));
+        }
+    }
+
     public function setLikeController(){
         if (myVerify($_POST['postId'])) {
             $postId = myEncrypte($_POST['postId'], "int");

@@ -4,8 +4,8 @@ ob_start(); ?>
 <div class="suggestion">
     <div class="back"><a href="./homepage"><i class="fa-solid fa-arrow-left"></i></a></div>
     <div class="information">
-        <p id="username">The Anonyme</p>
-        <p id="postNum">0 posts</p>
+        <p id="username"><?= $users["username"] ?></p>
+        <p id="postNum"><?= count($myPosts) ?> posts</p>
     </div>
 </div>
 
@@ -38,20 +38,18 @@ ob_start(); ?>
                 echo "<div style='display:none; z-index:-99999;' class='links'></div>";
             } ?>
         </div>
-
     </div>
     <div class="technicalInfo">
         <h2><?= $users["username"] ?></h2>
         <p class="thin">@<?= $users["pseudo"] ?></p>
         <div class="joined thin">
             <i class="fa-solid fa-calendar-days"></i>
-            <p id="dateJoined">13 Febrary</p>
+            <p id="dateJoined">13 Febrary</p> <!-- Replace with actual join date -->
         </div>
         <div class="follows">
             <p class="thin"><span class="big"><?= count($follow[1]) ?></span> Following</p>
             <p class="thin"><span class="big"><?= count($follow[0]) ?></span> Followers</p>
         </div>
-
     </div>
     <div class="navLink">
         <ul>
@@ -65,73 +63,76 @@ ob_start(); ?>
 </div>
 
 <div id="allTweets">
-
-    <?php
-    foreach ($myPosts as $key => $tweet) { ?>
+    <?php foreach ($myPosts as $key => $tweet) { ?>
         <div class="tweet">
             <div class="card">
                 <div class="headerCard">
                     <div class="userInfo">
-                        <div class="imgProfil"><img src="<?= $myPosts[$key]["profil"] ?>" alt=""></div>
+                        <div class="imgProfil"><img src="<?= $tweet["profil"] ?>" alt=""></div>
                         <div class="infoText">
-
-                            <div class="userName"><?= $myPosts[$key]["username"] ?></div>
-                            <div class="userPost">
-                                <?= $myPosts[$key]["content"] ?>
-                            </div>
+                            <div class="userName"><?= $tweet["username"] ?></div>
+                            <div class="userPost"><?= $tweet["content"] ?></div>
                         </div>
                     </div>
                 </div>
                 <div class="mediaCard">
                     <div class="media">
-                        <img src="<?= $myPosts[$key]["media"] ?>" alt="">
+                        <img src="<?= $tweet["media"] ?>" alt="">
                     </div>
                 </div>
                 <div class="footCard">
                     <div class="innerFoot">
-
-                        <div class="commentaire" data-target="<?= $myPost["id"] ?>" data-uid="<?= $myPost["user_id"] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat">233</span></div>
-                        <div class="share" data-target="<?= $myPost["id"] ?>" data-uid="<?= $myPost["user_id"] ?>"><i class="fa-solid fa-retweet"></i><span id="shareStat"><?= $myPosts[$key]["share"] ?></span></div>
-                        <div class="reaction" data-target="<?= $myPost["id"] ?>" data-uid="<?= $myPost["user_id"] ?>"><i class="fa-regular fa-heart"></i><span id="reacStat">233</span></div>
+                        <div class="commentaire" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat"><?= count($tweet['comments']) ?></span></div>
+                        <div class="share" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-solid fa-retweet"></i><span id="shareStat"><?= $tweet["share"] ?></span></div>
+                        <div class="reaction" data-target="<?= $tweet["id"] ?>" data-uid="<?= $tweet["user_id"] ?>"><i class="fa-regular fa-heart"></i><span id="reacStat"><?= $tweet["like"] ?></span></div>
                     </div>
                     <div class="commentSection" style="display: none;">
-                        <div class="comment">
-                            <a href="#">
-                                <div class="imgProfil rounded"><img src="./assets/favicon.webp" alt=""></div>
-                            </a>
-                            <div class="boxMsg">
-                                <div class="user">
-                                    <a href="#">Anonyme</a>
-                                    <a href="#">@anonyme</a>
-
+                        <div class="containComment">
+                            <?php if (!empty($tweet['comments'])) { ?>
+                                <?php foreach ($tweet['comments'] as $comment) { ?>
+                                    <div class="comment" style="margin-block:.5em;">
+                                        <a href="#">
+                                            <div class="imgProfil rounded"><img src="<?= isset($comment['comment_profil']) ? $comment['comment_profil'] : './assets/favicon.webp' ?>" alt=""></div>
+                                        </a>
+                                        <div class="boxMsg">
+                                            <div class="user">
+                                                <a href="#"><?= $comment['comment_username'] ?></a>
+                                                <a href="#">@<?= $comment['comment_pseudo'] ?></a>
+                                            </div>
+                                            <div class="contentMsg"><?= $comment['comment'] ?></div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <div class="comment">
+                                    <div class="boxMsg">
+                                        <div class="contentMsg">No comments yet.</div>
+                                    </div>
                                 </div>
-                                <div class="contentMsg">
-                                    fghjgnhnjjk
-                                </div>
-                            </div>
+                            <?php } ?>
+                        </div>
+                        <div class="commentForm">
+                            <form action="" style="display:flex" method="post" class="postComment" data-target="<?= $tweet["id"] ?>">
+                                <textarea style="background:transparent;color:white; width:75%" placeholder="Comments " id="" cols="30" rows="3" class="com"></textarea>
+                                <input type="submit" style="border-bottom-left-radius: 1px;border-top-left-radius: 1px" class="comP" value="Comment">
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     <?php } ?>
 </div>
 
 <div id="allReTweets" hidden>
-
     <?php foreach ($myRetweet as $key => $retweet) { ?>
-
         <div class="tweet">
             <div class="card">
                 <div class="headerCard">
                     <div class="userInfo">
                         <div class="imgProfil"><img src="<?= $retweet["retweeterprofil"] ?>" alt=""></div>
                         <div class="infoText">
-
                             <div class="userName"><?= $retweet["retweeterusername"] ?></div>
-
                         </div>
                     </div>
                 </div>
@@ -142,11 +143,8 @@ ob_start(); ?>
                                 <div class="userInfo">
                                     <div class="imgProfil"><img src="./assets/favicon.webp" alt=""></div>
                                     <div class="infoText">
-
                                         <div class="userName"><?= $retweet["username"] ?></div>
-                                        <div class="userPost">
-                                            <?= $retweet["content"] ?>
-                                        </div>
+                                        <div class="userPost"><?= $retweet["content"] ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -155,39 +153,35 @@ ob_start(); ?>
                                     <img src="<?= $retweet["media"] ?>" alt="">
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="footCard">
                     <div class="innerFoot">
-
-                        <div class="commentaire" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat">233</span></div>
-                        <div class="share" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-solid fa-retweet"></i><span id="shareStat">233</span></div>
-                        <div class="reaction" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-regular fa-heart"></i><span id="reacStat">233</span></div>
+                        <div class="commentaire" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-regular fa-comment"></i><span id="commentStat">0</span></div>
+                        <div class="share" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-solid fa-retweet"></i><span id="shareStat">0</span></div>
+                        <div class="reaction" data-target="<?= $retweet['post_id'] ?>" data-uid="<?= $retweet['user_id'] ?>"><i class="fa-regular fa-heart"></i><span id="reacStat">0</span></div>
                     </div>
                     <div class="commentSection" style="display: none;">
-                            <div class="comment">
-                                <a href="#">
-                                    <div class="imgProfil rounded"><img src="./assets/favicon.webp" alt=""></div>
-                                </a>
-                                <div class="boxMsg">
-                                    <div class="user">
-                                        <a href="#">Anonyme</a>
-                                        <a href="#">@anonyme</a>
-
-                                    </div>
-                                    <div class="contentMsg">
-                                        fghjgnhnjjk
-                                    </div>
+                        <div class="comment">
+                            <a href="#">
+                                <div class="imgProfil rounded"><img src="./assets/favicon.webp" alt=""></div>
+                            </a>
+                            <div class="boxMsg">
+                                <div class="user">
+                                    <a href="#">Anonyme</a>
+                                    <a href="#">@anonyme</a>
+                                </div>
+                                <div class="contentMsg">
+                                    fghjgnhnjjk
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
     <?php } ?>
-
 </div>
 
 <div id="allLikes" hidden>
@@ -195,9 +189,7 @@ ob_start(); ?>
 </div>
 
 <div id="followers" class="corner" hidden>
-
-    <?php
-    foreach ($follow[0] as $key => $follower) { ?>
+    <?php foreach ($follow[0] as $key => $follower) { ?>
         <div class="line thinb">
             <a href="./profil?uid=<?= $follower["id"] ?>" class="imgProfil">
                 <img src="<?= $follower["profil"] ?>" alt="Profile Picture">
@@ -214,9 +206,7 @@ ob_start(); ?>
 </div>
 
 <div id="followings" class="corner" hidden>
-
-    <?php
-    foreach ($follow[1] as $key => $following) { ?>
+    <?php foreach ($follow[1] as $key => $following) { ?>
         <div class="line thinb">
             <a href="./profil?uid=<?= $following["id"] ?>" class="imgProfil">
                 <img src="<?= $following["profil"] ?>" alt="Profile Picture">
@@ -236,11 +226,9 @@ ob_start(); ?>
     <div id="editBlock">
         <h3>Edit profile</h3>
         <form action="" method="POST" id="editForm">
-
             <input class="samein" type="text" name="username" placeholder="Username" id="uName" value="<?= $users["username"] ?>"><br>
             <input class="samein" type="text" name="pseudo" placeholder="pseudo" value="<?= $users["pseudo"] ?>" id="pseudo"><br>
-            <textarea name="bio" id="bio" cols="30" rows="3" placeholder="Bio..."><?= $users["bio"] ?></textarea>
-            <br>
+            <textarea name="bio" id="bio" cols="30" rows="3" placeholder="Bio..."><?= $users["bio"] ?></textarea><br>
             <input class="samein" type="password" name="psw" autocomplete="true" placeholder="Actual password" id="actualPass"><br>
             <input class="samein" type="password" name="newPsw" autocomplete="true" placeholder="New password" id="newPass"><br>
             <div class="password-criteria error" hidden>
@@ -251,12 +239,11 @@ ob_start(); ?>
                 <p class="chars">At least 2 capital special characters</p>
             </div>
             <input class="samein" type="password" name="cfPsw" autocomplete="true" placeholder="Confirm password" id="cfPass"><br>
-
-
             <input class="same" type="submit" name="updateProfile" value="Update" id="update">
         </form>
     </div>
 </div>
+
 <?php if (!isset($_GET["uid"])) { ?>
     <div class="logout">
         <label class="switch">
@@ -266,6 +253,7 @@ ob_start(); ?>
         <a href="./logout"><i class="fa-solid fa-power-off"></i></a>
     </div>
 <?php } ?>
+
 <?php
 $content = ob_get_clean();
 require "layout.php";

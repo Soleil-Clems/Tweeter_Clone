@@ -89,9 +89,9 @@
                     <ul>
                         <li><a href="./"><i class="fa-solid fa-house"></i> <span class="hideLink">Home</span></a></li>
                         <li><a href="./explore"><i class="fa-solid fa-magnifying-glass"></i> <span class="hideLink">Explore</span></a></li>
-                        <li><a href="./notifications"><i class="fa-solid fa-bell"></i> <span class="hideLink">Notifications</span></a>
+                        <li><a href="#"><i class="fa-solid fa-bell"></i> <span class="hideLink">Notifications</span></a>
                         </li>
-                        <li><a href="./messenger"><i class="fa-solid fa-envelope"></i> <span class="hideLink">Messages</span></a>
+                        <li><a href="#"><i class="fa-solid fa-envelope"></i> <span class="hideLink">Messages</span></a>
                         </li>
                         <li><a href="./profil"><i class="fa-solid fa-user"></i><span class="hideLink">Profil</span></a></li>
                     </ul>

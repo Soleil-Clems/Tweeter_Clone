@@ -12,26 +12,34 @@ class ProfilController
 
     public function getProfilController()
     {
+        $users = null;
         if (isset($_GET['uid'])) {
             $users = $this->model->getProfilModel();
-        }else{
+        } else {
+            
             $users = $_SESSION["user"];
-
         }
+
+        
         $hashtagController = new HashtagController();
         $hashtags = $hashtagController->getHashtagController();
 
-        $myPostController = new TweetController();
-        $myPosts = $myPostController->getAllMyTweetController();
-
-        $myRetweet = $myPostController->getAllMyRetweetController();
         
-        $UserController = new UserController();
-        $suggested = $UserController->getUserController();
+        $tweetController = new TweetController();
+        $myPosts = $tweetController->getAllMyTweetController();
 
-        $FollowController = new FollowController();
-        $follow = $FollowController->getFollowController();
+        
+        $myRetweet = $tweetController->getAllMyRetweetController();
 
+        
+        $userController = new UserController();
+        $suggested = $userController->getUserController();
+
+        
+        $followController = new FollowController();
+        $follow = $followController->getFollowController();
+
+        
         include(__DIR__ . '/../views/profil.php');
     }
 
